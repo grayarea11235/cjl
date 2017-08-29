@@ -1,0 +1,13 @@
+- A custom argument parser using streams
+name -a 15 - d"Some String"
+
+Argument
+    type: a
+    value: 15
+Argument
+    type: d
+    value: "Some String"
+
+
+- Add mp3 code
+- Mail utils
