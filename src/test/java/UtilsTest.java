@@ -46,7 +46,6 @@ public class UtilsTest {
         config.setAuth(true);
         config.setTls(true);
         config.setUserName("ciaran.dunn@gmail.com");
-        config.setPassword("zbyutctthbhlzzrw");
         /*
         SmtpConfig config = new SmtpConfig();
         config.setServer("127.0.0.1");
