@@ -50,7 +50,7 @@ public class LineNumberedFiles {
                             return false;
                         }
 
-                        action.accept(new NumberedLine(++line, s));
+                        action.accept(new NumberedLine(++line, s, p));
 
                         return true;
                     }

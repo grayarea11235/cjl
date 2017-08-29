@@ -40,19 +40,21 @@ public class UtilsTest {
 
     @Test
     public void mailSendTest() throws MessagingException {
+        /*
         SmtpConfig config = new SmtpConfig();
         config.setServer("smtp.gmail.com");
         config.setPort(587);
         config.setAuth(true);
         config.setTls(true);
         config.setUserName("ciaran.dunn@gmail.com");
-        /*
+        */
+
+        // This uses a local smtp server with not security of auth
         SmtpConfig config = new SmtpConfig();
         config.setServer("127.0.0.1");
         config.setPort(25);
         config.setAuth(false);
         config.setTls(false);
-        */
                 
         MailSend sm = new MailSend(config);
         sm

@@ -6,13 +6,22 @@ package com.cjl.streams;
  * 
  * @author cpd
  */
+
+import java.nio.file.Path;
+
+/**
+ *
+ * @author cpd
+ */
 public class NumberedLine {
     private final int number;
     private final String line;
+    private final Path path;
     
-    NumberedLine(int number, String line) {
+    NumberedLine(int number, String line, Path path) {
         this.number = number;
         this.line = line;
+        this.path = path;
     }
     
     public int getNumber() {
@@ -22,9 +31,13 @@ public class NumberedLine {
     public String getLine() {
         return line;
     }
+
+    public Path getPath() {
+        return path;
+    }
     
     @Override
     public String toString() {
-        return number + ":\t" + line;
+        return path.getFileName() + ":" + number + ":\t" + line;
     }
 }
