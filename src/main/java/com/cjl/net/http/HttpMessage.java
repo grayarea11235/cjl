@@ -14,10 +14,20 @@ import java.util.Optional;
  * @author ciaran
  */
 public class HttpMessage {
+    private HttpMethod method;
+
     private int code;
     private String version;
     private List<HttpHeader> headers = new ArrayList<>();
     private byte[] body;
+
+    public HttpMethod getMethod() {
+        return method;
+    }
+
+    public void setMethod(HttpMethod method) {
+        this.method = method;
+    }
 
     public String getVersion() {
         return version;

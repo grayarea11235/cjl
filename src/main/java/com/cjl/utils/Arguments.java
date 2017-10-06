@@ -10,5 +10,13 @@ package com.cjl.utils;
  * @author ciaran
  */
 public class Arguments {
+    private String[] args;
     
+    public Arguments(String[] args) {
+        this.args = args;
+    }
+    
+    public boolean isFlag() {
+        return false;
+    }
 }

@@ -18,7 +18,7 @@ public class NumberedLine {
     private final String line;
     private final Path path;
     
-    NumberedLine(int number, String line, Path path) {
+    public NumberedLine(int number, String line, Path path) {
         this.number = number;
         this.line = line;
         this.path = path;

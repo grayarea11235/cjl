@@ -18,6 +18,7 @@ import javax.mail.Transport;
  *
  * @author ciaran
  */
+// TODO : Complete MailSend
 public class MailSend {
     //private List<String> to = new ArrayList<>();
     private String to;

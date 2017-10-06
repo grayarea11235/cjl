@@ -5,10 +5,17 @@
  */
 package com.cjl.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  *
  * @author ciaran
  */
 public class FileUtils {
-    
+    public static String loadFile(String fileName) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(fileName));
+        return new String(encoded);
+    }    
 }
