@@ -29,6 +29,7 @@ public class Requests {
     
     
     private static void readResponse(BufferedReader in) throws IOException {
+        // TODO : Populate a HttpResponse
         String line;
         while ((line = in.readLine()) != null) {
             System.out.println(line);
@@ -37,7 +38,7 @@ public class Requests {
  
     public void get(String url) throws IOException {
         URL u = new URL(url);
-        int port = 80;
+        int port = 80; // Default to 80
         if (u.getPort() != -1) {
             port = u.getPort();
         }

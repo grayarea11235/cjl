@@ -9,6 +9,6 @@ package com.cjl.net.http;
  *
  * @author ciaran
  */
-public class HttpException {
+public class HttpException extends Exception {
     
 }
