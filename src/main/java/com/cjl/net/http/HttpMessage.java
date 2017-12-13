@@ -90,6 +90,4 @@ public class HttpMessage {
     public int getContentLength() {
         return this.body.length;
     }
-    
-    
 }
