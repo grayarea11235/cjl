@@ -23,32 +23,11 @@ import java.net.URL;
  */
 public class Requests {
     private void sendReq(BufferedWriter out, HttpRequest req) throws IOException {
-        String s = req.toString();
-        out.write(s);
-        
-        //out.write(String.format("GET %s HTTP/1.1\r\n", req.getUrl().getFile()));
-
-        //for (HttpHeader header : req.getHeaders()) {
-        //    out.write(header.toString());
-        //}
-        //out.write(req.getPath());
-        
-        //out.write("\r\n");
+        out.write(req.toString());
         out.flush();
     }
     
     
-    private void sendReq(BufferedWriter out, String req) throws IOException {
-        //out.write("GET /news/world/rss.xml?edition=uk HTTP/1.1\r\n");
-        
-        out.write("GET /news/world/rss.xml?edition=uk HTTP/1.1\r\n");
-        out.write("Host: feeds.bbci.co.uk\r\n");
-        //out.write("Cache-Control: no-cache\r\n");
-        out.write("\r\n");
-        
-        out.flush();
-    }
- 
     private static void readResponse(BufferedReader in) throws IOException {
         String line;
         while ((line = in.readLine()) != null) {
@@ -64,11 +43,6 @@ public class Requests {
         }
         
         Socket socket = new Socket(u.getHost(), port);
-        //String host = u.getHost();
-        //long port = u.getPort();
-        //String proto = u.getProtocol();
-        //String path = u.getPath();
-        //String query = u.getQuery();
         
         HttpMessage msg = new HttpMessage();
         msg.setMethod(HttpMethod.GET);
@@ -78,13 +52,6 @@ public class Requests {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
                 
-//        sendReq(out, "/");
-//        out.write(String.format("GET %s HTTP/1.1\r\n", u.getFile()));
-//        out.write(String.format("Host: %s\r\n", u.getHost()));
-//        //out.write("Cache-Control: no-cache\r\n");
-//        out.write("\r\n");
-//        out.flush();
-        
         HttpRequest req = new HttpRequest();
         req.setUrl(u);
         req.setMethod(HttpMethod.GET);
