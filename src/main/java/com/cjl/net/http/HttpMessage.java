@@ -5,6 +5,7 @@
  */
 package com.cjl.net.http;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,16 @@ public class HttpMessage {
 
     private int code;
     private String version;
-    private List<HttpHeader> headers = new ArrayList<>();
+    protected List<HttpHeader> headers = new ArrayList<>();
+    protected URL url;
+
+    public URL getUrl() {
+        return url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
     private byte[] body;
 
     public HttpMethod getMethod() {

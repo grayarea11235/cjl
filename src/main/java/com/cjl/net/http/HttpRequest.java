@@ -5,7 +5,7 @@
  */
 package com.cjl.net.http;
 
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -18,10 +18,9 @@ public class HttpRequest extends HttpMessage {
 
     //region Private
     private HttpMethod method;
-    private List<HttpHeader> headers = new ArrayList<>();
     private String path;
     //endregion Private
-    
+        
     public String getPath() {
         return path;
     }
@@ -34,16 +33,19 @@ public class HttpRequest extends HttpMessage {
         return headers;
     }
 
-    public void setHeaders(List<HttpHeader> headers) {
-        this.headers = headers;
-    }
-
+    @Override
     public void setMethod(HttpMethod method) {
         this.method = method;
     }
 
+    @Override
     public HttpMethod getMethod() {
         return method;
+    }
+    
+    
+    public URL getUrl() {
+        return url;
     }
     
     //public HttpHeader getHeader(String name) {
@@ -111,8 +113,11 @@ public class HttpRequest extends HttpMessage {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Method : %s", this.method));
-        //sb.append(String.format(""));
+        sb.append(String.format("GET %s HTTP/1.1\r\n", this.url.getFile()));
+        
+        this.getHeaders().forEach((header) -> {
+            sb.append(header.toString());
+        }); 
         
         
     //private List<HttpHeader> headers = new ArrayList<>();

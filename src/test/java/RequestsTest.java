@@ -44,10 +44,7 @@ public class RequestsTest {
     public void simpleGet() throws IOException 
     {
         Requests res = new Requests();
-        //res.get("http://www.google.com");
-        res.get("http://feeds.bbci.co.uk/news/world/rss.xml?edition=uk");
-        
-        
-        
+        res.get("https://blackberry.qnx.com/en");
+        //res.get("http://feeds.bbci.co.uk/news/world/rss.xml?edition=uk");
     }
 }

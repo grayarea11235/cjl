@@ -5,6 +5,8 @@
  */
 package com.cjl.net.http;
 
+import java.net.URL;
+
 /**
  *
  * @author ciaran
@@ -12,7 +14,7 @@ package com.cjl.net.http;
 public class HttpHeader {
     private String name;
     private String value;
-
+  
     public String getName() {
         return name;
     }
