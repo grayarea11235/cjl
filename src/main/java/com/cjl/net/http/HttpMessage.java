@@ -17,8 +17,9 @@ import java.util.Optional;
 public class HttpMessage {
     private HttpMethod method;
 
-    private int code;
-    private String version;
+    protected int code;
+    protected String version;
+
     protected List<HttpHeader> headers = new ArrayList<>();
     protected URL url;
 
