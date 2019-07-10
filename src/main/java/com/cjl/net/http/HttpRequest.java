@@ -79,12 +79,8 @@ public class HttpRequest extends HttpMessage {
             
             String[] f = firstLine.split(" ");
             
-            // TODO This is a construction zone
-//            HttpRequest result = new HttpRequest(f[1],"");
-            final var r = new HttpRequest(HttpMethod.GET);
-            
-
-            //result.setPath(f[1]);
+            result.setMethod(HttpMethod.GET);
+            result.setPath(f[1]);
             result.setVersion(f[2].replaceAll("\r\n", ""));
             
             result.setMethod(HttpMethod.GET);
@@ -118,14 +114,14 @@ public class HttpRequest extends HttpMessage {
             });
             
             // TODO Under construction
-            result = new HttpRequest(HttpMethod.POST, "/");
+            result.setMethod(HttpMethod.POST);
             in.removeIf(s -> s.equals("\r\n"));
-//            in.stream().skip(1).forEach(                                                                                                                                                                    
-//                    s -> { 
-//                    System.out.println("Stream : " + s); 
-//                    HttpHeader newHeader = new HttpHeader(s);
-//                    result.getHeaders().add(newHeader);
-//                });
+            in.stream().skip(1).forEach(                                                                                                                                                                    
+                    s -> { 
+                    System.out.println("Stream : " + s); 
+                    HttpHeader newHeader = new HttpHeader(s);
+                    result.getHeaders().add(newHeader);
+                });
         }
         
         return result;
