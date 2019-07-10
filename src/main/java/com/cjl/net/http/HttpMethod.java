@@ -10,6 +10,26 @@ package com.cjl.net.http;
  * @author ciaran
  */
 public enum HttpMethod {
-    GET, POST, DELETE, HEAD, PUT, TRACE, OPTIONS, CONNECT, PATCH
+
+    /*
+    GET("GET"),
+    POST("POST"),
+    DELETE("DELETE"),
+    HEAD("HEAD"),
+    PUT("PUT"),
+    TRACE("TRACE"),
+    OPTIONS("OPTIONS"),
+    CONNECT("CONNECT"),
+    PATCH("PATCH")
+     */
+    GET,
+    POST,
+    DELETE,
+    HEAD,
+    PUT,
+    TRACE,
+    OPTIONS,
+    CONNECT,
+    PATCH
 }
 

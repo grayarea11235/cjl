@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.cjl.net.http;
 
 import java.io.DataInputStream;
@@ -35,7 +29,7 @@ public class HttpServer {
         return this.hostName;
     }
         
-    HttpServer(int port)
+    HttpServer(String hostname, int port)
     {
         this.port = port;
         this.hostName = null;

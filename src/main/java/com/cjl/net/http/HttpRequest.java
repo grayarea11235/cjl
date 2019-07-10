@@ -14,6 +14,18 @@ import java.util.List;
  */
 public class HttpRequest extends HttpMessage {
     public HttpRequest() {
+        this.method = null;
+        this.path = null;
+    }
+
+    public HttpRequest(HttpMethod method) {
+        this.method = method;
+        this.path = null;
+    }
+
+    public HttpRequest(HttpMethod method, String path) {
+        this.method = method;
+        this.path = path;
     }
 
     //region Private
@@ -21,7 +33,8 @@ public class HttpRequest extends HttpMessage {
     private String path;
     //endregion Private
         
-    public String getPath() {
+    public String getPath()
+    {
         return path;
     }
 
@@ -34,12 +47,14 @@ public class HttpRequest extends HttpMessage {
     }
 
     @Override
-    public void setMethod(HttpMethod method) {
+    public void setMethod(HttpMethod method)
+    {
         this.method = method;
     }
 
     @Override
-    public HttpMethod getMethod() {
+    public HttpMethod getMethod()
+    {
         return method;
     }
     
@@ -53,7 +68,7 @@ public class HttpRequest extends HttpMessage {
     //}
     
     public static HttpRequest createRequest(List<String> in) {
-        HttpRequest result = new HttpRequest();
+        final var result = new HttpRequest();
  
         assert(in.size() > 0);
         
@@ -63,7 +78,13 @@ public class HttpRequest extends HttpMessage {
             System.out.println("Got a GET request!");
             
             String[] f = firstLine.split(" ");
-            result.setPath(f[1]);
+            
+            // TODO This is a construction zone
+//            HttpRequest result = new HttpRequest(f[1],"");
+            final var r = new HttpRequest(HttpMethod.GET);
+            
+
+            //result.setPath(f[1]);
             result.setVersion(f[2].replaceAll("\r\n", ""));
             
             result.setMethod(HttpMethod.GET);
@@ -96,15 +117,15 @@ public class HttpRequest extends HttpMessage {
                 System.out.print(line);
             });
             
-            //result = new HttpRequest();
-            result.setMethod(HttpMethod.POST);
+            // TODO Under construction
+            result = new HttpRequest(HttpMethod.POST, "/");
             in.removeIf(s -> s.equals("\r\n"));
-            in.stream().skip(1).forEach(                                                                                                                                                                    
-                    s -> { 
-                    System.out.println("Stream : " + s); 
-                    HttpHeader newHeader = new HttpHeader(s);
-                    result.getHeaders().add(newHeader);
-                });
+//            in.stream().skip(1).forEach(                                                                                                                                                                    
+//                    s -> { 
+//                    System.out.println("Stream : " + s); 
+//                    HttpHeader newHeader = new HttpHeader(s);
+//                    result.getHeaders().add(newHeader);
+//                });
         }
         
         return result;

@@ -27,48 +27,60 @@ public class HttpMessage {
         return url;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(URL url)
+    {
         this.url = url;
     }
+
     private byte[] body;
 
-    public HttpMethod getMethod() {
+    public HttpMethod getMethod()
+    {
         return method;
     }
 
-    public void setMethod(HttpMethod method) {
+    public void setMethod(HttpMethod method)
+    {
         this.method = method;
     }
 
-    public String getVersion() {
+    public String getVersion()
+    {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(String version)
+    {
         this.version = version;
     }
     
-    public void setHeaders(List<HttpHeader> headers) {
+    public void setHeaders(List<HttpHeader> headers)
+    {
         this.headers = headers;
     }
 
-    public byte[] getBody() {
+    public byte[] getBody()
+    {
         return body;
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(byte[] body)
+    {
         this.body = body;
     }
 
-    public int getCode() {
+    public int getCode()
+    {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(int code)
+    {
         this.code = code;
     }
     
-    public void addHeader(HttpHeader header) {
+    public void addHeader(HttpHeader header)
+    {
         this.headers.add(header);
     }
     

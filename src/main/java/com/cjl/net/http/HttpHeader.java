@@ -12,24 +12,24 @@ import java.net.URL;
  * @author ciaran
  */
 public class HttpHeader {
-    private String name;
-    private String value;
+    private final String name;
+    private final String value;
   
     public String getName() {
         return name;
     }
     
-    public void setName(String name) {
-        this.name = name;
-    }
+    //public void setName(String name) {
+    //    this.name = name;
+    //}
 
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+    //public void setValue(String value) {
+    //    this.value = value;
+    //}
     
     public HttpHeader(String name, String value) {
         this.name = name;
@@ -47,6 +47,9 @@ public class HttpHeader {
             name = sp[0];
             value = sp[1];
         } else {
+            // TODO Fix this ugly
+            name = null;
+            value = null;
             // TODO : Throw exception
         }
     }

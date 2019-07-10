@@ -53,11 +53,11 @@ public class Requests {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
                 
-        HttpRequest req = new HttpRequest();
+        HttpRequest req = new HttpRequest(HttpMethod.GET, String.format("GET %s HTTP/1.1\r\n", u.getFile()));
         req.setUrl(u);
-        req.setMethod(HttpMethod.GET);
+        //req.setMethod(HttpMethod.GET);
         req.addHeader(new HttpHeader("Host", String.format("%s\r\n", u.getHost())));
-        req.setPath(String.format("GET %s HTTP/1.1\r\n", u.getFile()));
+        //req.setPath(String.format("GET %s HTTP/1.1\r\n", u.getFile()));
         String s = req.toString();
         System.out.println("***" + s);
         

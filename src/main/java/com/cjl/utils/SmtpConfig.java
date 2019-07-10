@@ -5,7 +5,7 @@
  */
 package com.cjl.utils;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -66,6 +66,4 @@ public class SmtpConfig {
     public void setTls(boolean tls) {
         this.tls = tls;
     }
-    
-    
 }
