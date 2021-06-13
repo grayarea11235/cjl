@@ -13,8 +13,7 @@ import java.util.List;
  * @author cpd
  */
 public class HttpRequest extends HttpMessage {
-<<<<<<< HEAD
-=======
+/*
     public HttpRequest() {
         this.method = null;
         this.path = null;
@@ -24,8 +23,7 @@ public class HttpRequest extends HttpMessage {
         this.method = method;
         this.path = null;
     }
-
->>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
+*/
     public HttpRequest(HttpMethod method, String path) {
         this.method = method;
         this.path = path;
@@ -49,20 +47,14 @@ public class HttpRequest extends HttpMessage {
         return headers;
     }
 
-<<<<<<< HEAD
-//    @Override
-//    public void setMethod(HttpMethod method)
-//    {
-//        this.method = method;
-//    }
-=======
+/*
     @Override
     public void setMethod(HttpMethod method)
     {
         this.method = method;
     }
->>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
-
+*/
+    
     @Override
     public HttpMethod getMethod()
     {
@@ -79,11 +71,7 @@ public class HttpRequest extends HttpMessage {
     //}
     
     public static HttpRequest createRequest(List<String> in) {
-<<<<<<< HEAD
-        //HttpRequest result = new HttpRequest();
-=======
         final var result = new HttpRequest();
->>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
  
         assert(in.size() > 0);
         
@@ -93,14 +81,12 @@ public class HttpRequest extends HttpMessage {
             System.out.println("Got a GET request!");
             
             String[] f = firstLine.split(" ");
-<<<<<<< HEAD
+            // Turn string into enum... this was all fixed but got fucked by a bad merge.
             HttpRequest result = new HttpRequest(f[1],"");
             //result.setPath(f[1]);
-=======
             
-            result.setMethod(HttpMethod.GET);
-            result.setPath(f[1]);
->>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
+//            result.setMethod(HttpMethod.GET);
+//            result.setPath(f[1]);
             result.setVersion(f[2].replaceAll("\r\n", ""));
             
             result.setMethod(HttpMethod.GET);

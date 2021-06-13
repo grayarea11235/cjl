@@ -3,21 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cjl.net.http;
 
 /**
  *
- * @author ciaran
+ * @author ciara
  */
-public enum HttpMethod {
-    GET,
-    POST,
-    DELETE,
-    HEAD,
-    PUT,
-    TRACE,
-    OPTIONS,
-    CONNECT,
-    PATCH
+public class IrcUI {
+    
+    
+    public static void main(String[] args) {
+        
+    }
 }
-

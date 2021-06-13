@@ -3,21 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cjl.net.http;
+package com.cjl.utils;
 
 /**
  *
- * @author ciaran
+ * @author ciara
  */
-public enum HttpMethod {
-    GET,
-    POST,
-    DELETE,
-    HEAD,
-    PUT,
-    TRACE,
-    OPTIONS,
-    CONNECT,
-    PATCH
-}
+public class Shell {
 
+
+    public void init() {
+        
+    }
+    
+    public void run() {
+        
+    }
+}
