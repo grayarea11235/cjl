@@ -71,8 +71,10 @@ public class HttpRequest extends HttpMessage {
     //}
     
     public static HttpRequest createRequest(List<String> in) {
-        final var result = new HttpRequest();
- 
+        //final var result = new HttpRequest();
+        HttpRequest result = null;
+        
+        
         assert(in.size() > 0);
         
         String firstLine = in.get(0);
@@ -82,7 +84,8 @@ public class HttpRequest extends HttpMessage {
             
             String[] f = firstLine.split(" ");
             // Turn string into enum... this was all fixed but got fucked by a bad merge.
-            HttpRequest result = new HttpRequest(f[1],"");
+//            HttpRequest result = new HttpRequest(f[1],"");
+            result = new HttpRequest(HttpMethod.GET, "");
             //result.setPath(f[1]);
             
 //            result.setMethod(HttpMethod.GET);
@@ -95,7 +98,8 @@ public class HttpRequest extends HttpMessage {
                     s -> { 
                     System.out.print("Stream : " + s); 
                     HttpHeader newHeader = new HttpHeader(s);
-                    result.getHeaders().add(newHeader);
+// THIS IS WHATS FUCKING THIS!                   
+//                    result.getHeaders().add(newHeader);
                 });
 /*            
             in.subList(1, in.size()).forEach(
@@ -119,20 +123,20 @@ public class HttpRequest extends HttpMessage {
                 System.out.print(line);
             });
             
-<<<<<<< HEAD
             //result = new HttpRequest();
             //result.setMethod(HttpMethod.POST);
-            HttpRequest result = new HttpMessage();
-=======
+            result = new HttpRequest(HttpMethod.POST, "");
+
             // TODO Under construction
-            result.setMethod(HttpMethod.POST);
->>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
+            //result.setMethod(HttpMethod.POST);
+
             in.removeIf(s -> s.equals("\r\n"));
             in.stream().skip(1).forEach(                                                                                                                                                                    
                     s -> { 
                     System.out.println("Stream : " + s); 
                     HttpHeader newHeader = new HttpHeader(s);
-                    result.getHeaders().add(newHeader);
+// THIS IS WHATS FUCKING THIS!                   
+//result.getHeaders().add(newHeader);
                 });
         }
         

@@ -11,7 +11,7 @@ package com.cjl.term;
  */
 public class TermProcess {
     public TermProcess(String program) {
-        Process p = new ProcessBuilder("notepad.exe").start();
-        System.out.println(p.getPid());        
+        //Process p = new ProcessBuilder("notepad.exe").start();
+        //System.out.println(p.getPid());        
     }
 }

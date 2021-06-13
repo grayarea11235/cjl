@@ -40,7 +40,7 @@ public class ArgumentsTest {
     public void testSimpleArgs() {
         var testArgs = new String[] { "ls",  "-l" };
         
-        var args = new Arguments(testArgs);
+        //var args = new Arguments(testArgs);
         
     }
 }
