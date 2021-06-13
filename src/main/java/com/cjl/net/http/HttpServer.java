@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.cjl.net.http;
 
 import java.io.DataInputStream;
@@ -25,29 +19,24 @@ public class HttpServer {
     private final String hostName;
     private final String rootPath = "/home/cpd/root";
     
-    public int getPort()
-    {
+    public int getPort() {
         return this.port;
     }
     
-    public String getHostname()
-    {
+    public String getHostname() {
         return this.hostName;
     }
         
-    HttpServer(int port)
-    {
+    HttpServer(String hostname, int port) {
         this.port = port;
         this.hostName = null;
     }
     
-    private String loadFromFile(String fileName)
-    {
+    private String loadFromFile(String fileName) {
         return null;
     }
     
-    private String get404Message()
-    {
+    private String get404Message() {
         StringBuilder sb = new StringBuilder();
         
         String content = "<html><body>404 Not Found</body></html>";
@@ -59,7 +48,6 @@ public class HttpServer {
                 
         return sb.toString();
     }
-    
     
     private String readHTTPLine(DataInputStream i) throws IOException {
         String result = "";

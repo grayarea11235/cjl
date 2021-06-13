@@ -12,11 +12,15 @@ package com.cjl.utils;
 public class Arguments {
     private String[] args;
     
+    private void parseArgs() {
+        
+    }
+    
     public Arguments(String[] args) {
         this.args = args;
     }
     
-    public boolean isFlag() {
+    public boolean isFlag(String flag) {
         return false;
     }
 }

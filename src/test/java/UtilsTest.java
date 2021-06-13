@@ -55,7 +55,6 @@ public class UtilsTest {
         config.setPort(25);
         config.setAuth(false);
         config.setTls(false);
-                
         MailSend sm = new MailSend(config);
         sm
                 .from("ciaran.dunn@gmail.com")

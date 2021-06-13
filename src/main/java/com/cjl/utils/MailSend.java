@@ -26,6 +26,7 @@ public class MailSend {
     private String subject;
     private String textContent;
     private final SmtpConfig config;
+    private boolean debug;
     
     public MailSend(SmtpConfig config) {
         this.config = config;

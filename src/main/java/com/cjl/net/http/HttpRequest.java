@@ -13,33 +13,38 @@ import java.util.List;
  * @author cpd
  */
 public class HttpRequest extends HttpMessage {
-    public HttpRequest() {
+    public HttpRequest(HttpMethod method, String path) {
+        this.method = method;
+        this.path = path;
     }
 
     //region Private
-    private HttpMethod method;
-    private String path;
+    private final HttpMethod method;
+    private final String path;
     //endregion Private
         
-    public String getPath() {
+    public String getPath()
+    {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+//    public void setPath(String path) {
+//        this.path = path;
+//    }
 
     public List<HttpHeader> getHeaders() {
         return headers;
     }
 
-    @Override
-    public void setMethod(HttpMethod method) {
-        this.method = method;
-    }
+//    @Override
+//    public void setMethod(HttpMethod method)
+//    {
+//        this.method = method;
+//    }
 
     @Override
-    public HttpMethod getMethod() {
+    public HttpMethod getMethod()
+    {
         return method;
     }
     
@@ -53,7 +58,7 @@ public class HttpRequest extends HttpMessage {
     //}
     
     public static HttpRequest createRequest(List<String> in) {
-        HttpRequest result = new HttpRequest();
+        //HttpRequest result = new HttpRequest();
  
         assert(in.size() > 0);
         
@@ -63,7 +68,8 @@ public class HttpRequest extends HttpMessage {
             System.out.println("Got a GET request!");
             
             String[] f = firstLine.split(" ");
-            result.setPath(f[1]);
+            HttpRequest result = new HttpRequest(f[1],"");
+            //result.setPath(f[1]);
             result.setVersion(f[2].replaceAll("\r\n", ""));
             
             result.setMethod(HttpMethod.GET);
@@ -97,7 +103,8 @@ public class HttpRequest extends HttpMessage {
             });
             
             //result = new HttpRequest();
-            result.setMethod(HttpMethod.POST);
+            //result.setMethod(HttpMethod.POST);
+            HttpRequest result = new HttpMessage();
             in.removeIf(s -> s.equals("\r\n"));
             in.stream().skip(1).forEach(                                                                                                                                                                    
                     s -> { 
