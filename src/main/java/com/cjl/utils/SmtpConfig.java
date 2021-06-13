@@ -66,6 +66,4 @@ public class SmtpConfig {
     public void setTls(boolean tls) {
         this.tls = tls;
     }
-    
-    
 }

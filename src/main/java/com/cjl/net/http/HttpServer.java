@@ -27,7 +27,12 @@ public class HttpServer {
         return this.hostName;
     }
         
+<<<<<<< HEAD
     HttpServer(String hostname, int port) {
+=======
+    HttpServer(String hostname, int port)
+    {
+>>>>>>> d0a749686d49fcb6503c0c8832a794b31cc26ab6
         this.port = port;
         this.hostName = null;
     }
