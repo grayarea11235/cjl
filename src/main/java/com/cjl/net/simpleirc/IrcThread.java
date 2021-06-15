@@ -42,6 +42,7 @@ public class IrcThread {
             System.out.println("In socket thread");
             Socket socket;
             try {
+                // irc.libera.chat:6697 (TLS)
                 socket = new Socket("irc.undernet.org", 6667);
                 socket.setSoTimeout(500);
                 

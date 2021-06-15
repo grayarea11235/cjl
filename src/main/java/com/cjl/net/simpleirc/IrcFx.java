@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author ciara
+ * @author cpd
  */
 public class IrcFx extends Application {
     
