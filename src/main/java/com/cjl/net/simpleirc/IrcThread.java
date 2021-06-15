@@ -118,7 +118,6 @@ public class IrcThread {
         }).start();
     }
     
-    
      public void start() {
         new Thread(() -> {
             Socket socket;

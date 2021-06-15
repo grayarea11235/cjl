@@ -25,40 +25,38 @@ import java.util.logging.Logger;
  * @author ciara
  */
 public class MyIrc {
+
     private final String address;
     private final int port;
-    
+
     private InetSocketAddress hostAddress;
     private AsynchronousSocketChannel client;
-    
+
     private BlockingQueue<String> in_queue = new LinkedBlockingQueue<>();
     private BlockingQueue<String> out_queue = new LinkedBlockingQueue<>();
-    
-    public MyIrc(   String address, 
-                    int port, 
-                    BlockingQueue<String> requests,
-                    BlockingQueue<String> replies) {
+
+    public MyIrc(String address,
+            int port,
+            BlockingQueue<String> requests,
+            BlockingQueue<String> replies) {
         this.address = address;
         this.port = port;
-        
+
         this.in_queue = requests;
-        this.out_queue = replies;    
+        this.out_queue = replies;
     }
-    
-    
+
     public void startReaad() {
-        
+
     }
-    
-    
-    
+
     private void start_read() throws IOException {
         final ByteBuffer buf = ByteBuffer.allocate(2048);
-                                
-        while(true) {
+
+        while (true) {
             //Future<Integer> fs = client.read(buf);
-            
-            this.client.read(buf, this.client, new CompletionHandler<Integer, AsynchronousSocketChannel>(){
+
+            this.client.read(buf, this.client, new CompletionHandler<Integer, AsynchronousSocketChannel>() {
                 @Override
                 public void completed(Integer result, AsynchronousSocketChannel channel) {
                     //message is read from server
@@ -76,32 +74,45 @@ public class MyIrc {
         }
     }
 
+    private void write_block(String sendStr) throws InterruptedException, ExecutionException {
+        var bb = ByteBuffer.wrap(sendStr.getBytes());
+        
+        System.out.println(String.format("Sending : %s", sendStr));
+        
+        Future<Integer> fi = client.write(bb);
+        System.out.println(String.format("Have written %d bytes", fi.get()));
+    }
 
     // This is the TCP thread
     public void start() {
-        new Thread( () -> {
-                try {
+        new Thread(() -> {
+            try {
                 //this.client = AsynchronousSocketChannel.open();
                 //this.hostAddress = new InetSocketAddress("eu.undernet.org", 6667);
-                
+
                 String req;
                 try {
                     while (true) {
                         req = in_queue.take();
                         if (req != null) {
                             System.out.println(req);
-                            
+
                             if (req.toLowerCase().equals("connect")) {
                                 var nick = String.format("test%d", new Random().nextInt());
                                 do_connect(nick);
-                                
+
+                                /*
                                 var sendStr = String.format("NICK %s", nick);
                                 var bb = ByteBuffer.wrap(sendStr.getBytes());
-    
                                 Future<Integer> fi = client.write(bb);
-                                
                                 System.out.println(String.format("Have written %d bytes", fi.get()));
-/*                                
+                                */
+                                
+                                write_block(String.format("NICK %s", nick));
+                                write_block(String.format("USER %s * * :Jim Bob", nick));
+                                
+                                
+                                /*                                
                                 client.write(bb, client,  new CompletionHandler<Integer, AsynchronousSocketChannel >() {
                                     @Override
                                     public void completed(Integer result, AsynchronousSocketChannel channel ) {
@@ -130,31 +141,34 @@ public class MyIrc {
                                         Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
                                     }
                                 }
-*/
+                                 */
+                            } else {
+                                var bb = ByteBuffer.wrap(req.getBytes());
+                                Future<Integer> fi = client.write(bb);
+
+                                System.out.println(String.format("Have written %d bytes", fi.get()));
+
                             }
 
                         }
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
-                }   catch (ExecutionException ex) {
-                        Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                
-                
+                } catch (ExecutionException ex) {
+                    Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } catch (IOException ex) {
                 Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-                
         }).start();
     }
-    
+
     public void do_connect(String nick) throws InterruptedException, IOException {
         this.client = AsynchronousSocketChannel.open();
         this.hostAddress = new InetSocketAddress("eu.undernet.org", 6667);
 
-       // This has to complete sync before we start a sending
+        // This has to complete sync before we start a sending
         Future<Void> future = client.connect(hostAddress);
         try {
             future.get();
@@ -162,18 +176,27 @@ public class MyIrc {
         } catch (ExecutionException ex) {
             Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         //start_read();
-        
-        new Thread(() -> { 
+        new Thread(() -> {
+            final ByteBuffer buf = ByteBuffer.allocate(4096);
             while (true) {
-                final ByteBuffer buf = ByteBuffer.allocate(2048);
                 Future<Integer> fs = client.read(buf);
 
                 try {
                     Integer rep = fs.get();
 
-                    System.out.println(String.format("Read res is %d and returned is %s", rep, new String(buf.array())));
+                    var respStr = new String(buf.array());
+
+                    if (respStr.startsWith("PING")) {
+                        System.out.println("Got PING!");
+
+                        String[] splitStr = respStr.split(" ");
+                        write_block(String.format("PONG %s", splitStr[1]));
+                    }
+
+                    System.out.println(String.format("Read res is %d and returned is %s", rep, respStr));
+
                     buf.clear();
                 } catch (ExecutionException | InterruptedException ex) {
                     Logger.getLogger(MyIrc.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,31 +205,30 @@ public class MyIrc {
         }
         ).start();
     }
-    
+
     public void join(String channel) {
-        
+
     }
-    
-    
+
     public static void main(String[] args) throws IOException, InterruptedException {
         BlockingQueue<String> requests = new LinkedBlockingQueue<>();
         BlockingQueue<String> replies = new LinkedBlockingQueue<>();
-        
-        var myIrc 
+
+        var myIrc
                 = new MyIrc("eu.undernet.org", 6667, requests, replies);
-        
+
         myIrc.do_connect("Chickens");
         myIrc.start();
-        
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         boolean done = false;
-        
+
         while (!done) {
             System.out.print("> ");
 
             String inp = reader.readLine();
             if (inp.toLowerCase().equals("exit")) {
-                 done = true;
+                done = true;
             } else {
                 requests.put(inp);
             }
