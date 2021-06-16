@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.nio.charset.Charset;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,9 +21,20 @@ import java.util.logging.Logger;
  * @author ciara
  */
 public class IrcThread {
+    private static final Logger log = Logger.getLogger(IrcThread.class.getName());
+            
     private final BlockingQueue<String> in;
     private final BlockingQueue<String> out;
     
+    private String url;
+    private int port;
+    
+    private Socket socket;
+    private boolean connected = false;
+    
+    private PrintStream sock_out;
+    private BufferedReader sock_in;
+        
     public IrcThread(BlockingQueue<String> requests,
                      BlockingQueue<String> replies) {
         this.in = requests;
@@ -33,119 +42,104 @@ public class IrcThread {
     }
     
     private void sendSocket(PrintStream ps, String data) {
-        System.out.println(String.format("SEND : %s", data));
+        log.log(Level.INFO, String.format("SEND : %s", data));
         ps.println(data);
     }
     
-    public void start_socket() {
+    private void processCommand(String command) {
+        
+    }
+    
+    public void connect(String nick) {
+        sendSocket(sock_out, String.format("NICK %s", nick));
+        sendSocket(sock_out, String.format("USER %s * * :Jim Bob", nick));   
+        
+        // Read thread
         new Thread(() -> {
-            System.out.println("In socket thread");
-            Socket socket;
+            while (true) {
+                String line;
+                try {
+                    line = sock_in.readLine();
+
+                    if (line != null) {
+                        System.out.println(line);
+                        if (line.startsWith("PING")) {
+                            String[] toks = line.split(" ");
+                            sendSocket(sock_out, "PONG " + toks[1]);
+                        }
+                    }
+
+                } catch (IOException ex) {
+                    Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }).start();
+    }
+    
+    public void start() throws InterruptedException {
+        new Thread(() -> {
+            log.log(Level.INFO, "In socket thread");
             try {
                 // irc.libera.chat:6697 (TLS)
-                socket = new Socket("irc.undernet.org", 6667);
-                socket.setSoTimeout(500);
+                this.socket = new Socket("irc.undernet.org", 6667);
+                //this.socket.setSoTimeout(500);
                 
-                PrintStream sock_out = new PrintStream(socket.getOutputStream());
-                BufferedReader sock_in = new BufferedReader(new InputStreamReader( socket.getInputStream()));
+                sock_out = new PrintStream(this.socket.getOutputStream());
+                sock_in = new BufferedReader(new InputStreamReader( this.socket.getInputStream()));
+        
+                System.out.println(sock_out);
 
-                var random = new Random();
-                String nick = String.format("test%d", random.nextLong());
-                        
-                //sock_out.println(String.format("NICK %s", nick)); 
-                sendSocket(sock_out, String.format("NICK %s", nick));
-                
-                //sock_out.println(String.format("USER %s * * :Jim Bob", nick));
-                sendSocket(sock_out, String.format("USER %s * * :Jim Bob", nick));
-
-                //sock_out.println("/J #bookz");
-                //sendSocket(sock_out, "/J #bookz");
-                
-                sock_out.println();
+                //sock_out.println();
 
                 String line;
                 String req;
                 while (true) {
+                    req = "";
                     try {
-                        //System.out.println("Polling");
-                        line = sock_in.readLine();
 
-                        //System.out.println(line);
-                        if (line != null) {
-                            System.out.println(line);
-                            if (line.startsWith("PING")) {
-                                String[] toks = line.split(" ");
-                                sendSocket(sock_out, "PONG " + toks[1]);
-                                //sock_out.println("PONG " + toks[1]);
-                            }
+                        synchronized(this) {
+                            this.connected = true;
+                            notifyAll();
                         }
 
-                    } catch(SocketTimeoutException ste) {
-                        //System.out.println("In timeout");
-                        //System.out.println(String.format("Q isEmpty %s", in.isEmpty())); 
-                        if (!in.isEmpty()) {
-                            req = "";
-                            try {
-                                req = in.take();
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            
-                            if (!req.equals("")) {
-                                System.out.println(String.format("GOT : %s", req));
-                            
-                                sendSocket(sock_out, req);
-                            }
-                        }
-                        /*
-                        socket.setSoTimeout(1000);
-                        try {
-                            req = in.take();
-                            if (req != null) {
-                                System.out.println(String.format("GOT : %s", req));
-                            }
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        */
+                        req = in.take();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-              
+                    if (!req.equals("")) {
+                        log.log(Level.INFO, String.format("GOT : %s", req));
+
+                        if (req.startsWith("/")) {
+                            // process cmd
+                            processCommand(req);
+                        } else {
+                            // send raw to server
+                            sendSocket(sock_out, req);
+                        }
+                        
+                    }
                 }
             } catch (IOException ex) {
                 Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }).start();
+         }).start();
+        
+        synchronized(this){
+            while(!this.connected) {
+                wait();
+            }
+        }
+        
+        log.log(Level.INFO, "Connected to socket");
     }
     
-     public void start() {
-        new Thread(() -> {
-            Socket socket;
-            try {
-                socket = new Socket("eu.undernet.org", 6667);
-                PrintStream sock_out = new PrintStream(socket.getOutputStream());
-                BufferedReader sock_in = new BufferedReader(new InputStreamReader( socket.getInputStream()));
-            } catch (IOException ex) {
-                Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            while (true) {
-                // TODO: we may want a way to stop the thread
-                try {
-                    String req = in.take();
-                    
-                    if (req.equals("/connect")) {
-                        //sock_out.println();
-                    } else {
-                    }
-                    
-                    
-                    
-                    out.put(String.format("Hi there %s", req));
-                } catch (InterruptedException ie) {
-                }
-            }
-        }).start();
+    public void disconnect() {
+        
+    }
+    
+    public void join(String channel) {
+        
     }
     
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -153,8 +147,11 @@ public class IrcThread {
         BlockingQueue<String> replies = new LinkedBlockingQueue<>();
         
         var ircThread = new IrcThread(requests, replies);
-        //ircThread.start();
-        ircThread.start_socket();
+        ircThread.start();
+
+        var random = new Random();
+        String nick = String.format("test%d", random.nextInt());
+        ircThread.connect(nick);
         
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while(true) {
@@ -162,6 +159,8 @@ public class IrcThread {
             String name = reader.readLine();
             
             if (name.equals("exit")) {
+                ircThread.disconnect();
+                
                 System.out.println("Bye");
                 break;
             }

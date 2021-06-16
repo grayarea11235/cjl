@@ -9,6 +9,10 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -18,6 +22,19 @@ import javafx.stage.Stage;
  */
 public class IrcFx extends Application {
     
+    private void testTab() {
+        TabPane tabPane = new TabPane();
+
+        Tab tab1 = new Tab("Planes", new Label("Show all planes available"));
+        Tab tab2 = new Tab("Cars"  , new Label("Show all cars available"));
+        Tab tab3 = new Tab("Boats" , new Label("Show all boats available"));
+
+        tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab2);
+        tabPane.getTabs().add(tab3);
+    }
+    
+    
     @Override
     public void start(Stage primaryStage) {
         Button btn = new Button();
@@ -26,12 +43,27 @@ public class IrcFx extends Application {
             System.out.println("Hello World!");
         });
         
+        //TextArea textArea = new TextArea();
+
+
+        TabPane tabPane = new TabPane();
+
+        Tab tab1 = new Tab("Planes", new Label("Show all planes available"));
+        Tab tab2 = new Tab("Cars"  , new Label("Show all cars available"));
+        Tab tab3 = new Tab("Boats" , new Label("Show all boats available"));
+
+        tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab2);
+        tabPane.getTabs().add(tab3);
+
+        
         StackPane root = new StackPane();
         root.getChildren().add(btn);
+        root.getChildren().add(tabPane);
 
         Scene scene = new Scene(root, 300, 250);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("IrcFx");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
