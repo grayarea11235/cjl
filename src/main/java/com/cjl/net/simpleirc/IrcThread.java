@@ -47,9 +47,21 @@ public class IrcThread {
     }
     
     private void processCommand(String command) {
+        var strs = command.split(" ");
         
+        switch (strs[0]) {
+            case "/j":
+            case "/join":
+                join(strs[1]); // Support multiple channel?
+                break;
+            default:
+                System.err.println("Unknown command!");
+        }
     }
     
+    
+    // Connect to the IRC server and send the NICK message. Then start the recv thread.
+    // TODO The NICK and USER messages shoudl be moved out... just lazy for now for testing.
     public void connect(String nick) {
         sendSocket(sock_out, String.format("NICK %s", nick));
         sendSocket(sock_out, String.format("USER %s * * :Jim Bob", nick));   
@@ -62,7 +74,10 @@ public class IrcThread {
                     line = sock_in.readLine();
 
                     if (line != null) {
+                        log.log(Level.INFO, String.format("RECV : ", line));
+                        
                         System.out.println(line);
+                        
                         if (line.startsWith("PING")) {
                             String[] toks = line.split(" ");
                             sendSocket(sock_out, "PONG " + toks[1]);
@@ -76,6 +91,7 @@ public class IrcThread {
         }).start();
     }
     
+    // Start the IRC system and connect to the single socket. DOnt return until the socket is fully connected.
     public void start() throws InterruptedException {
         new Thread(() -> {
             log.log(Level.INFO, "In socket thread");
@@ -134,12 +150,14 @@ public class IrcThread {
         log.log(Level.INFO, "Connected to socket");
     }
     
+    // Disconnect from IRC server
     public void disconnect() {
         
     }
     
+    // Join an IRC channel
     public void join(String channel) {
-        
+        sendSocket(sock_out, String.format("JOIN %s", channel));
     }
     
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -166,7 +184,6 @@ public class IrcThread {
             }
             
             requests.put(name);
-            //System.out.println(replies.take());
         }
     }
 }
