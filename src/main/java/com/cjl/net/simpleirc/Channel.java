@@ -1,4 +1,4 @@
-/*
+f/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class Channel {
     private final String name;
+    private String topic;
     private final List<String> users = new ArrayList<>();
     
     public Channel(String name) {

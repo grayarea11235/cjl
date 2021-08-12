@@ -29,6 +29,8 @@ public class IrcThread {
     private String url;
     private int port;
     
+    private String nick;
+    
     private Socket socket;
     private boolean connected = false;
     
@@ -65,6 +67,7 @@ public class IrcThread {
     public void connect(String nick) {
         sendSocket(sock_out, String.format("NICK %s", nick));
         sendSocket(sock_out, String.format("USER %s * * :Jim Bob", nick));   
+        this.nick = nick;
         
         // Read thread
         new Thread(() -> {
@@ -76,16 +79,20 @@ public class IrcThread {
                     if (line != null) {
                         log.log(Level.INFO, String.format("RECV : ", line));
                         
-                        System.out.println(line);
+                        System.out.print(line);
+                        
+                        String[] split = line.split(" ");
+                        System.out.print(String.format(" (%d)", split.length));
+                        System.out.println(String.format(" (cmd=%s)", split[1]));
+                        
                         
                         if (line.startsWith("PING")) {
                             String[] toks = line.split(" ");
                             sendSocket(sock_out, "PONG " + toks[1]);
                         }
                     }
-
                 } catch (IOException ex) {
-                    Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
+                    log.log(Level.SEVERE, null, ex);
                 }
             }
         }).start();
@@ -97,16 +104,13 @@ public class IrcThread {
             log.log(Level.INFO, "In socket thread");
             try {
                 // irc.libera.chat:6697 (TLS)
-                this.socket = new Socket("irc.undernet.org", 6667);
+                this.socket = new Socket("irc.eu.libera.chat", 6667);
+//                this.socket = new Socket("irc.undernet.org", 6667);
                 //this.socket.setSoTimeout(500);
                 
                 sock_out = new PrintStream(this.socket.getOutputStream());
                 sock_in = new BufferedReader(new InputStreamReader( this.socket.getInputStream()));
         
-                System.out.println(sock_out);
-
-                //sock_out.println();
-
                 String line;
                 String req;
                 while (true) {
@@ -120,7 +124,7 @@ public class IrcThread {
 
                         req = in.take();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
+                        log.log(Level.SEVERE, null, ex);
                     }
 
                     if (!req.equals("")) {
@@ -137,7 +141,7 @@ public class IrcThread {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(IrcThread.class.getName()).log(Level.SEVERE, null, ex);
+                log.log(Level.SEVERE, null, ex);
             }
          }).start();
         
